@@ -1,16 +1,10 @@
-package TasksType;
-
-import Status.Status;
+package model;
 
 public class Task {
     private int id;
-    String name;
-    String description;
-    Status status;
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
+    private String name;
+    private String description;
+    private Status status;
 
     public Task(int id, String name, String description, Status status) { //Конструктор со всеми полями
         this.id = id;
@@ -29,6 +23,10 @@ public class Task {
     public Task(String name, String description, Status status) { //Конструктор без id
         this.name = name;
         this.description = description;
+        this.status = status;
+    }
+
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -52,5 +50,13 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
