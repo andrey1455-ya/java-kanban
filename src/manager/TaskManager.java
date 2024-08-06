@@ -15,7 +15,7 @@ public class TaskManager {
 
     private final HashMap<Integer, Task> taskHashMap = new HashMap<>();
     private final HashMap<Integer, Epic> epicHashMap = new HashMap<>();
-    public HashMap<Integer, Subtask> subtasksHashMap = new HashMap<>();
+    private final HashMap<Integer, Subtask> subtasksHashMap = new HashMap<>();
 
     //Методы для Тасок
     public Collection<Task> getAllTasks() { // Метод получения всех Тасок

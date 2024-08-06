@@ -149,7 +149,7 @@ public class Main {
         printDelimeter();
     }
 
-    public static void printDelimeter() {
+    public static void printDelimeter() { //Печать разделителей в консоли для разделения действий
         System.out.println("-".repeat(90));
     }
 }
