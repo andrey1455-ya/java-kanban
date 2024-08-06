@@ -15,7 +15,7 @@ public class TaskManager {
 
     private final HashMap<Integer, Task> taskHashMap = new HashMap<>();
     private final HashMap<Integer, Epic> epicHashMap = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasksHashMap = new HashMap<>();
+    public HashMap<Integer, Subtask> subtasksHashMap = new HashMap<>();
 
     //Методы для Тасок
     public Collection<Task> getAllTasks() { // Метод получения всех Тасок
@@ -49,7 +49,6 @@ public class TaskManager {
     public void deleteTaskById(int id) {  // Метод удаления Таски по id.
         taskHashMap.remove(id);
     }
-
 
     //Методы для Эпиков
     public Collection<Epic> getAllEpics() { //Метод получения всех эпиков
@@ -85,23 +84,21 @@ public class TaskManager {
     }
 
     public void deleteEpicById(int id) {  // Метод удаления Эпика по id.
-        getSubtasksForEpic(id).clear();
+        ArrayList<Integer> subtasksIdsForEpic = epicHashMap.get(id).getSubtasksIds();
+        for (Integer subtaskId : subtasksIdsForEpic) {
+            subtasksHashMap.remove(subtaskId);
+        }
         epicHashMap.remove(id);
     }
 
     public ArrayList<Subtask> getSubtasksForEpic(int id) { //Метод получения списка сабтасок по id Эпика
-        Epic epic = epicHashMap.get(id);
+        ArrayList<Integer> subtasksIdsForEpic = epicHashMap.get(id).getSubtasksIds();
         ArrayList<Subtask> subtasksForEpic = new ArrayList<>();
-        for (int i : epic.getSubtasksIds()) {
-            for (Subtask subtask : subtasksHashMap.values()) {
-                if (i == subtask.getId()) {
-                    subtasksForEpic.add(subtask);
-                }
-            }
+        for (int subtaskId : subtasksIdsForEpic) {
+            subtasksForEpic.add(subtasksHashMap.get(subtaskId));
         }
         return subtasksForEpic;
     }
-
 
     //Методы для сабтасок
     public Collection<Subtask> getAllSubtasks() { //Получение списка всех сабтасок
@@ -154,9 +151,6 @@ public class TaskManager {
         for (Epic epic : epicHashMap.values()) {
             epic.getSubtasksIds().remove(Integer.valueOf(id));
             checkEpicStatus(epic.getId());
-            if (epic.getSubtasksIds().isEmpty()) {
-                epic.setStatus(Status.NEW);
-            }
         }
     }
 
@@ -167,6 +161,10 @@ public class TaskManager {
 
     private void checkEpicStatus(int epicId) {// Метод для проверки статуса эпика
         Epic epic = epicHashMap.get(epicId);
+        if (epic.getSubtasksIds().isEmpty()) {
+                epic.setStatus(Status.NEW);
+                return;
+            }
         ArrayList<Integer> subtasksIds = epic.getSubtasksIds();
         ArrayList<Subtask> epicSubtasks = new ArrayList<>();
         for (int id : subtasksIds) {
