@@ -5,11 +5,14 @@ import model.Status;
 import model.Subtask;
 import model.Task;
 
+import java.util.ArrayList;
+
 
 public class Main {
 
     public static void main(String[] args) {
         System.out.println("Поехали!");
+
 
         TaskManager inMemoryTaskManager = Managers.getDefault();
 
@@ -153,12 +156,15 @@ public class Main {
         System.out.println(inMemoryTaskManager.getAllEpics());
         printDelimeter();
 
-
     }
 
     public static void printDelimeter() { //Печать разделителей в консоли для разделения действий
         System.out.println("-".repeat(90));
     }
+
+
+
+
 
 
 }

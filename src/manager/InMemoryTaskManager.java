@@ -6,22 +6,21 @@ import model.Subtask;
 import model.Task;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
 
     private int id = 1;
-    HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
+    private final HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
     private final HashMap<Integer, Task> taskHashMap = new HashMap<>();
     private final HashMap<Integer, Epic> epicHashMap = new HashMap<>();
     private final HashMap<Integer, Subtask> subtasksHashMap = new HashMap<>();
 
     //Методы для Тасок
     @Override
-    public Collection<Task> getAllTasks() { // Метод получения всех Тасок
-        return taskHashMap.values();
+    public ArrayList<Task> getAllTasks() { // Метод получения всех Тасок
+        return new ArrayList<>(taskHashMap.values());
     }
 
     @Override
@@ -60,8 +59,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     //Методы для Эпиков
     @Override
-    public Collection<Epic> getAllEpics() { //Метод получения всех эпиков
-        return epicHashMap.values();
+    public ArrayList<Epic> getAllEpics() { //Метод получения всех эпиков
+        return new ArrayList<>(epicHashMap.values());
     }
 
     @Override
@@ -118,8 +117,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     //Методы для сабтасок
     @Override
-    public Collection<Subtask> getAllSubtasks() { //Получение списка всех сабтасок
-        return subtasksHashMap.values();
+    public ArrayList<Subtask> getAllSubtasks() { //Получение списка всех сабтасок
+        return new ArrayList<>(subtasksHashMap.values());
     }
 
     @Override

@@ -5,13 +5,12 @@ import model.Subtask;
 import model.Task;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 public interface TaskManager {
     //Методы для Тасок
-    Collection<Task> getAllTasks();
+    ArrayList<Task> getAllTasks();
 
     void deleteAllTasks();
 
@@ -24,7 +23,7 @@ public interface TaskManager {
     void deleteTaskById(int id);
 
     //Методы для Эпиков
-    Collection<Epic> getAllEpics();
+    ArrayList<Epic> getAllEpics();
 
     void deleteAllEpics();
 
@@ -39,7 +38,7 @@ public interface TaskManager {
     ArrayList<Subtask> getSubtasksForEpic(int id);
 
     //Методы для сабтасок
-    Collection<Subtask> getAllSubtasks();
+    ArrayList<Subtask> getAllSubtasks();
 
     HashMap<Integer, Epic> deleteAllSubtasks();
 

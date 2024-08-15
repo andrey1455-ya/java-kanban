@@ -1,5 +1,3 @@
-package test;
-
 import manager.HistoryManager;
 import manager.InMemoryHistoryManager;
 import manager.InMemoryTaskManager;
@@ -13,13 +11,17 @@ public class ManagerTest {
 
     @Test
     public void shouldBeManagerReturnsReadyToWorkInMemoryTaskManager(){
+        //do
         TaskManager inMemoryTaskManager = Managers.getDefault();
+        //check
         assertInstanceOf(InMemoryTaskManager.class, inMemoryTaskManager);
     }
 
     @Test
     public void shouldBeManagerReturnsReadyToWorkInMemoryHistoryManager(){
+        //do
         HistoryManager inHistoryTaskManager = Managers.getDefaultHistory();
+        //check
         assertInstanceOf(InMemoryHistoryManager.class, inHistoryTaskManager);
     }
 }
