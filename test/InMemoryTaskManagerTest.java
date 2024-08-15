@@ -150,7 +150,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldCantAddEpicToEpic() {
+    public void shouldCantAddEpicToEpic() {//Проверка, что объект Epic нельзя добавить в самого себя в виде подзадачи;
         //prepare
         Epic epic1 = new Epic(1, "Epic 1", "description");
         Subtask subtask = new Subtask(1, 1, "Epic1", "Epic 1 Description", Status.NEW);
@@ -163,7 +163,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldCantMakeSubtaskOwnEpic() {
+    public void shouldCantMakeSubtaskOwnEpic() {//Проверка, что объект Subtask нельзя сделать своим же эпиком
         //prepare
         Epic epic1 = new Epic(1, "Epic 1", "description");
         Subtask subtask = new Subtask(1, 1, "Epic1", "Epic 1 Description", Status.NEW);
