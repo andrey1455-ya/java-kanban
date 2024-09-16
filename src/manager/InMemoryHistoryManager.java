@@ -13,7 +13,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     private final Map<Integer, Node<Task>> taskHistoryMap = new HashMap<>();
 
     @Override
-    public void addTaskToHistory(Task task) {
+    public void addTaskToHistory(Task task) { //Добавление задачи в историю
         if (task != null) {
             remove(task.getId());
             linkLast(task);
@@ -21,10 +21,10 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public List<Task> getHistory() {
+    public List<Task> getHistory() { //Получение списка задач в из истории
         List<Task> historyList = new ArrayList<>();
         Node<Task> currentNode = head;
-        while (currentNode != null) {
+        for (int i = 0; i < taskHistoryMap.size(); i++) {
             historyList.add(currentNode.data);
             currentNode = currentNode.next;
         }
@@ -32,7 +32,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void remove(int id) {
+    public void remove(int id) {//Удаление задачи из истории
         Node<Task> node = taskHistoryMap.get(id);
         taskHistoryMap.remove(id);
         if (node != null) {
@@ -40,9 +40,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    private void linkLast(Task task) {
-        final Node<Task> oldTail = tail;
-        final Node<Task> newNode = new Node<>(oldTail, task, null);
+    private void linkLast(Task task) { //Добавление задачи в конец двусвязного списка
+        Node<Task> oldTail = tail;
+        Node<Task> newNode = new Node<>(oldTail, task, null);
         tail = newNode;
         if (oldTail == null) {
             head = newNode;
@@ -52,9 +52,12 @@ public class InMemoryHistoryManager implements HistoryManager {
         taskHistoryMap.put(task.getId(), newNode);
     }
 
-    private void removeNode(Node<Task> node) {
-        final Node<Task> prevNode = node.prev;
-        final Node<Task> nextNode = node.next;
+    private void removeNode(Node<Task> node) {//Удаление задачи из двусвязного списка
+        if (node == null) {
+            return;
+        }
+        Node<Task> prevNode = node.prev;
+        Node<Task> nextNode = node.next;
         if (prevNode == null) {
             head = nextNode;
         } else {
