@@ -15,7 +15,7 @@ public class Task {
         this.status = status;
     }
 
-    public Task(int id, String name, String description) {//Конструктор без статуса, по умолчанию NEW
+    public Task(int id, String name, String description) { //Конструктор без статуса, по умолчанию NEW
         this.id = id;
         this.name = name;
         this.description = description;

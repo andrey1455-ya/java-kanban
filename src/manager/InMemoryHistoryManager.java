@@ -32,7 +32,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void remove(int id) {//Удаление задачи из истории
+    public void remove(int id) { //Удаление задачи из истории
         Node<Task> node = taskHistoryMap.get(id);
         taskHistoryMap.remove(id);
         if (node != null) {
@@ -52,7 +52,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         taskHistoryMap.put(task.getId(), newNode);
     }
 
-    private void removeNode(Node<Task> node) {//Удаление задачи из двусвязного списка
+    private void removeNode(Node<Task> node) { //Удаление задачи из двусвязного списка
         if (node == null) {
             return;
         }

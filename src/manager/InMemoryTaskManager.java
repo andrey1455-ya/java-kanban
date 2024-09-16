@@ -177,16 +177,16 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getHistory() {//Метод получения истории
+    public List<Task> getHistory() { //Метод получения истории
         return inMemoryHistoryManager.getHistory();
     }
 
     //Вспомогательные методы
-    private Integer generateNewId() { // Универсальный метод для генерации ID тасок/эпиков/сабтасок
+    private Integer generateNewId() { //Универсальный метод для генерации ID тасок/эпиков/сабтасок
         return id++;
     }
 
-    private void checkEpicStatus(int epicId) {// Метод для проверки статуса эпика
+    private void checkEpicStatus(int epicId) { // Метод для проверки статуса эпика
         Epic epic = epicHashMap.get(epicId);
         if (epic.getSubtasksIds().isEmpty()) {
             epic.setStatus(Status.NEW);
@@ -236,5 +236,4 @@ public class InMemoryTaskManager implements TaskManager {
                 ", subtasksHashMap=" + subtasksHashMap +
                 '}';
     }
-
 }
