@@ -134,10 +134,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public HashMap<Integer, Epic> deleteAllSubtasks() {
+    public HashMap<Integer, Epic> deleteAllSubtasks() { //Удаление всех сабтасок
         for (Integer key : subtasksHashMap.keySet()) {
             inMemoryHistoryManager.remove(key);
-        }//Удаление всех сабтасок
+        }
         subtasksHashMap.clear();
         for (Epic epic : epicHashMap.values()) {
             epic.cleanSubtaskIds();
