@@ -76,7 +76,7 @@ public class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void shouldGetAllSubtaskFromEpicById() { //Проверка что по id эпика получаем все добавленные в него сабтаскии
+    public void shouldGetAllSubtaskFromEpicById() { //Проверка, что по id эпика получаем все добавленные в него сабтаски
         //prepare
         Epic epic1 = new Epic(1, "Epic 1", "Epic 1 Description");
         Subtask subtask1 = new Subtask(1, 1, "Subtask 1", "Subtask 1 Description", Status.NEW);

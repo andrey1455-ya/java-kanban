@@ -35,5 +35,4 @@ public class TasksTest {
         //check
         assertEquals(subtask1, subtask2, "Сабтаски не равны");
     }
-
 }
