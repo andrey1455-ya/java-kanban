@@ -1,5 +1,7 @@
 package model;
 
+import manager.TaskType;
+
 import java.util.Objects;
 
 public class Task {
@@ -60,12 +62,21 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Таска/сабтаска = {" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                '}';
+        return String.format("%d,%s,%s,%s,%s,", id, TaskType.TASK, name, status, description);
+    }
+
+    public static Task fromString(String value) {
+        String[] fields = value.split(",");
+        int id = Integer.parseInt(fields[0]);
+        TaskType taskType = TaskType.valueOf(fields[1]);
+        String name = fields[2];
+        Status status = Status.valueOf(fields[3]);
+        String description = fields[4];
+
+        if (taskType == TaskType.TASK) {
+            return new Task(id, name, description, status);
+        }
+        throw new IllegalArgumentException(String.format("Неподдерживаемый тип задачи: %s", taskType));
     }
 
     @Override

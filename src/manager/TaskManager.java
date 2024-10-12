@@ -12,7 +12,7 @@ public interface TaskManager {
     //Методы для Тасок
     ArrayList<Task> getAllTasks();
 
-    void deleteAllTasks();
+    HashMap<Integer, Task> deleteAllTasks();
 
     Task getTaskById(int id);
 
@@ -20,12 +20,12 @@ public interface TaskManager {
 
     Task updateTask(Task updatedTask);
 
-    void deleteTaskById(int id);
+    HashMap<Integer, Task> deleteTaskById(int id);
 
     //Методы для Эпиков
     ArrayList<Epic> getAllEpics();
 
-    void deleteAllEpics();
+    HashMap<Integer, Epic> deleteAllEpics();
 
     Epic getEpicById(int id);
 
@@ -33,22 +33,22 @@ public interface TaskManager {
 
     Epic updateEpic(Epic updatedEpic);
 
-    void deleteEpicById(int id);
+    HashMap<Integer, Epic> deleteEpicById(int id);
 
     ArrayList<Subtask> getSubtasksForEpic(int id);
 
     //Методы для сабтасок
     ArrayList<Subtask> getAllSubtasks();
 
-    HashMap<Integer, Epic> deleteAllSubtasks();
+    HashMap<Integer, Subtask> deleteAllSubtasks();
 
     Subtask getSubtaskById(int id);
 
     Subtask addNewSubtask(Subtask newSubtask);
 
-    void updateSubtask(Subtask updatedSubtask);
+    Subtask updateSubtask(Subtask updatedSubtask);
 
-    void deleteSubtaskById(int id);
+    HashMap<Integer, Subtask> deleteSubtaskById(int id);
 
     List<Task> getHistory();
 }
