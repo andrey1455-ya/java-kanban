@@ -12,7 +12,7 @@ public interface TaskManager {
     //Методы для Тасок
     ArrayList<Task> getAllTasks();
 
-    HashMap<Integer, Task> deleteAllTasks();
+    void deleteAllTasks();
 
     Task getTaskById(int id);
 
@@ -25,7 +25,7 @@ public interface TaskManager {
     //Методы для Эпиков
     ArrayList<Epic> getAllEpics();
 
-    HashMap<Integer, Epic> deleteAllEpics();
+    void deleteAllEpics();
 
     Epic getEpicById(int id);
 
@@ -40,7 +40,7 @@ public interface TaskManager {
     //Методы для сабтасок
     ArrayList<Subtask> getAllSubtasks();
 
-    HashMap<Integer, Subtask> deleteAllSubtasks();
+    void deleteAllSubtasks();
 
     Subtask getSubtaskById(int id);
 

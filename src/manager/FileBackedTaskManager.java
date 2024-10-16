@@ -12,7 +12,7 @@ import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
 
     public FileBackedTaskManager(File file) {
@@ -61,7 +61,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 }
             }
         } catch (IOException e) {
-            throw new ManagerSaveException(String.format("Ошибка при сохранении данных в файл: %s", file.getName()));
+            throw new ManagerSaveException(String.format("Ошибка при чтении данных из файла: %s", file.getName()));
         }
         return manager;
     }
@@ -130,23 +130,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     @Override
-    public HashMap<Integer, Task> deleteAllTasks() {
+    public void deleteAllTasks() {
         super.deleteAllTasks();
         save();
-        return taskHashMap;
     }
 
     @Override
-    public HashMap<Integer, Subtask> deleteAllSubtasks() {
+    public void deleteAllSubtasks() {
         super.deleteAllSubtasks();
         save();
-        return subtasksHashMap;
     }
 
     @Override
-    public HashMap<Integer, Epic> deleteAllEpics() {
+    public void deleteAllEpics() {
         super.deleteAllEpics();
         save();
-        return epicHashMap;
     }
 }

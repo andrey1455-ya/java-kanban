@@ -24,12 +24,11 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public HashMap<Integer, Task> deleteAllTasks() { // Метод удаления всех Тасок
+    public void deleteAllTasks() { // Метод удаления всех Тасок
         for (Integer key : taskHashMap.keySet()) {
             inMemoryHistoryManager.remove(key);
         }
         taskHashMap.clear();
-        return taskHashMap;
     }
 
     @Override
@@ -70,7 +69,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public HashMap<Integer, Epic> deleteAllEpics() { // Метод удаления всех эпиков
+    public void deleteAllEpics() { // Метод удаления всех эпиков
         for (Integer key : epicHashMap.keySet()) {
             inMemoryHistoryManager.remove(key);
         }
@@ -79,7 +78,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
         epicHashMap.clear();
         subtasksHashMap.clear();
-        return epicHashMap;
     }
 
     @Override
@@ -138,7 +136,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public HashMap<Integer, Subtask> deleteAllSubtasks() { //Удаление всех сабтасок
+    public void deleteAllSubtasks() { //Удаление всех сабтасок
         for (Integer key : subtasksHashMap.keySet()) {
             inMemoryHistoryManager.remove(key);
         }
@@ -147,7 +145,6 @@ public class InMemoryTaskManager implements TaskManager {
             epic.cleanSubtaskIds();
             epic.setStatus(Status.NEW);
         }
-        return subtasksHashMap;
     }
 
     @Override
