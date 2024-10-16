@@ -1,5 +1,7 @@
 package model;
 
+import manager.TaskType;
+
 import java.util.ArrayList;
 
 
@@ -34,13 +36,22 @@ public class Epic extends Task {
         subtasksIds.clear();
     }
 
+    public static Epic fromString(String value) {
+        String[] fields = value.split(",");
+        int id = Integer.parseInt(fields[0]);
+        TaskType taskType = TaskType.valueOf(fields[1]);
+        String name = fields[2];
+        Status status = Status.valueOf(fields[3]);
+        String description = fields[4];
+
+        if (taskType == TaskType.EPIC) {
+            return new Epic(id, name, description, status);
+        }
+        throw new IllegalArgumentException(String.format("Неподдерживаемый тип задачи: %s", taskType));
+    }
+
     @Override
     public String toString() {
-        return "Epic{" +
-                "id=" + getId() + '\'' +
-                ", name=" + getName() + '\'' +
-                ", description=" + getDescription() + '\'' +
-                ", status=" + getStatus() +
-                ", subtasksIds=" + getSubtasksIds() + '}';
+        return String.format("%d,%s,%s,%s,%s,", getId(), TaskType.EPIC, getName(), getStatus(), getDescription());
     }
 }
