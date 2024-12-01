@@ -49,7 +49,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task addNewTask(Task newTask) {// Метод добавления новой Таски
+    public Task addNewTask(Task newTask) { // Метод добавления новой Таски
         newTask.setId(generateNewId());
         taskHashMap.put(newTask.getId(), newTask);
         addTaskInPrioritizedTasks(newTask);
@@ -69,7 +69,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public HashMap<Integer, Task> deleteTaskById(int id) {// Метод удаления Таски по id.
+    public HashMap<Integer, Task> deleteTaskById(int id) { // Метод удаления Таски по id.
         Task task = taskHashMap.get(id);
         inMemoryHistoryManager.remove(id);
         taskHashMap.remove(id);
@@ -235,7 +235,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public HashMap<Integer, Subtask> deleteSubtaskById(int id) {//Удаление сабтаски по id
+    public HashMap<Integer, Subtask> deleteSubtaskById(int id) { //Удаление сабтаски по id
         inMemoryHistoryManager.remove(id);
         Subtask subtask = subtasksHashMap.remove(id);
         prioritizedTasks.remove(subtask);
