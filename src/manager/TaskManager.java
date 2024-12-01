@@ -35,7 +35,7 @@ public interface TaskManager {
 
     HashMap<Integer, Epic> deleteEpicById(int id);
 
-    ArrayList<Subtask> getSubtasksForEpic(int id);
+    List<Subtask> getSubtasksForEpic(int id);
 
     //Методы для сабтасок
     ArrayList<Subtask> getAllSubtasks();

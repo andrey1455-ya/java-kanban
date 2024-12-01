@@ -1,39 +1,33 @@
+import exception.TaskValidationException;
+import manager.InMemoryTaskManager;
 import manager.Managers;
 import manager.TaskManager;
 import model.Epic;
 import model.Status;
 import model.Subtask;
 import model.Task;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class InMemoryTaskManagerTest {
+public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
+    @Override
+    protected InMemoryTaskManager createTaskManager() {
+        return new InMemoryTaskManager();
+    }
 
     TaskManager inMemoryTaskManager = Managers.getDefault();
 
-
-    @Test
+    @Override
     public void shouldBeInMemoryTaskManagerPutAllTaskTypes() { //InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
-        //prepare
-        Task task1 = new Task(1, "Task 1", "Description 1");
-        Task task2 = task1;
-        Epic epic1 = new Epic(1, "Epic 1", "Epic 1 Description");
-        Epic epic2 = epic1;
-        Subtask subtask1 = new Subtask(1, 2, "Subtask1", "Subtask 1 Description", Status.NEW);
-        Subtask subtask2 = subtask1;
-        //do
-        inMemoryTaskManager.addNewTask(task1);
-        inMemoryTaskManager.addNewEpic(epic1);
-        inMemoryTaskManager.addNewSubtask(subtask1);
-        //check
-        assertEquals(task2, inMemoryTaskManager.getTaskById(1), "Таска из менеджера не равна добавленной");
-        assertEquals(epic2, inMemoryTaskManager.getEpicById(2), "Эпик из менеджера не равен добавленному");
-        assertEquals(subtask2, inMemoryTaskManager.getSubtaskById(3), "Сабтаска из менеджера не равна добавленной");
+        super.shouldBeInMemoryTaskManagerPutAllTaskTypes();
     }
 
     @Test
@@ -175,6 +169,45 @@ public class InMemoryTaskManagerTest {
                 "Объект Subtask нельзя сделать своим же эпиком");
     }
 
+    @Test
+    public void shouldEpicStatusNewWhenAllSubtaskStatusNew() {
+        Epic epic = new Epic(1, "epic1", "des1", Status.NEW);
+        int id = inMemoryTaskManager.addNewEpic(epic).getId();
+        Subtask subtask1 = new Subtask(1, 1, "subtask1", "desc subtask1", Status.NEW);
+        Subtask subtask2 = new Subtask(2, 1, "subtask2", "desc subtask2", Status.NEW);
+        Subtask subtask3 = new Subtask(3, 1, "subtask3", "desc subtask3", Status.NEW);
+        inMemoryTaskManager.addNewSubtask(subtask1);
+        inMemoryTaskManager.addNewSubtask(subtask2);
+        inMemoryTaskManager.addNewSubtask(subtask3);
+        Assertions.assertEquals(Status.NEW, inMemoryTaskManager.getEpicById(id).getStatus());
+    }
+
+    @Test
+    public void shouldEpicStatusDoneWhenAllSubtaskStatusDone() {
+        Epic epic = new Epic("epic1", "des1", Status.NEW);
+        int id = inMemoryTaskManager.addNewEpic(epic).getId();
+        Subtask subtask1 = new Subtask(1, 1, "subtask1", "desc subtask1", Status.DONE);
+        Subtask subtask2 = new Subtask(2, 1, "subtask2", "desc subtask2", Status.DONE);
+        Subtask subtask3 = new Subtask(3, 1, "subtask3", "desc subtask3", Status.DONE);
+        inMemoryTaskManager.addNewSubtask(subtask1);
+        inMemoryTaskManager.addNewSubtask(subtask2);
+        inMemoryTaskManager.addNewSubtask(subtask3);
+        Assertions.assertEquals(Status.DONE, inMemoryTaskManager.getEpicById(id).getStatus());
+    }
+
+    @Test
+    public void shouldEpicStatusInProgressWhenAllSubtaskStatusInProgress() {
+        Epic epic = new Epic("epic1", "des1", Status.NEW);
+        int id = inMemoryTaskManager.addNewEpic(epic).getId();
+        Subtask subtask1 = new Subtask(1, 1, "subtask1", "desc subtask1", Status.IN_PROGRESS);
+        Subtask subtask2 = new Subtask(2, 1, "subtask2", "desc subtask2", Status.IN_PROGRESS);
+        Subtask subtask3 = new Subtask(3, 1, "subtask3", "desc subtask3", Status.IN_PROGRESS);
+        inMemoryTaskManager.addNewSubtask(subtask1);
+        inMemoryTaskManager.addNewSubtask(subtask2);
+        inMemoryTaskManager.addNewSubtask(subtask3);
+        Assertions.assertEquals(Status.IN_PROGRESS, inMemoryTaskManager.getEpicById(id).getStatus());
+    }
+
     public void createTasks(int count) {// Доп. метод для создания задач
         ArrayList<Task> testTasks = new ArrayList<>();
         ArrayList<Epic> testEpics = new ArrayList<>();
@@ -202,5 +235,18 @@ public class InMemoryTaskManagerTest {
         for (Subtask testSubtask : testSubtasks) {
             inMemoryTaskManager.addNewSubtask(testSubtask);
         }
+    }
+
+    @Test
+    public void shouldDoNotSaveTaskInPrioritizedTasksIfIntersect() {
+        Task task1 = new Task(1, "Task 1", "Description task 1", Status.NEW, Duration.ofMinutes(10),
+                LocalDateTime.of(2024, 2, 12, 16, 20, 0));
+        Task task2 = new Task(2, "Task 2", "Description task 2", Status.NEW, Duration.ofMinutes(20)
+                , LocalDateTime.of(2024, 2, 12, 16, 30, 0));
+        Task task3 = new Task(3, "Task 3", "Description task 3", Status.NEW, Duration.ofMinutes(30)
+                , LocalDateTime.of(2024, 2, 12, 16, 10, 0));
+        inMemoryTaskManager.addNewTask(task1);
+        inMemoryTaskManager.addNewTask(task2);
+        Assertions.assertThrows(TaskValidationException.class, () -> inMemoryTaskManager.addNewTask(task3));
     }
 }
