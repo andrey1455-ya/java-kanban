@@ -1,7 +1,5 @@
 import exception.ManagerSaveException;
 import manager.FileBackedTaskManager;
-import manager.Managers;
-import manager.TaskManager;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -42,9 +40,10 @@ public class FileBackedTaskManagerTest {
     public void shouldTasksSaveToFile() throws IOException {
         Task task = new Task(1, "Task 1", "Task 1 Description", Status.NEW, Duration.ofMinutes(10),
                 LocalDateTime.of(2024, 2, 12, 16, 20, 0));
-        Epic epic = new Epic(1, "Epic 1", "Epic 1 Description", Status.NEW, Duration.ofMinutes(10),
+        Epic epic = new Epic(1, "Epic 1", "Epic 1 Description", Status.NEW, Duration.ofMinutes(5),
                 LocalDateTime.of(2024, 2, 12, 16, 20, 0));
-        Subtask subtask = new Subtask(2, "Subtask 1", "Subtask 1 Description", Status.NEW, 2);
+        Subtask subtask = new Subtask(2, "Subtask 1", "Subtask 1 Description",2, Status.NEW, Duration.ofMinutes(5),
+                LocalDateTime.of(2024, 2, 12, 16, 20, 0));
         fileBackedTaskManager.addNewTask(task);
         fileBackedTaskManager.addNewEpic(epic);
         fileBackedTaskManager.addNewSubtask(subtask);
@@ -52,17 +51,19 @@ public class FileBackedTaskManagerTest {
         String savedData = Files.readString(file.toPath());
         String expectedData = "id,type,name,status,description,epic\n" +
                 task.getId() + ",TASK,Task 1,NEW,Task 1 Description,10,16:20 12.02.2024\n" +
-                epic.getId() + ",EPIC,Epic 1,NEW,Epic 1 Description,0,16:20 12.02.2024\n" +
-                subtask.getId() + ",SUBTASK,Subtask 1,NEW,Subtask 1 Description," + epic.getId() + "\n";
+                epic.getId() + ",EPIC,Epic 1,NEW,Epic 1 Description,5,16:20 12.02.2024\n" +
+                subtask.getId() + ",SUBTASK,Subtask 1,NEW,Subtask 1 Description,"+ epic.getId()+",5,16:20 12.02.2024"  + "\n";
         assertEquals(expectedData, savedData);
     }
 
     @Test
     public void shouldLoadTasksFromFile() throws IOException {
-        String fileContent = "id,type,name,status,description,epic\n" +
-                "1,TASK,Task 1,NEW,Task 1 Description,10,16:20 12.02.2024\n" +
-                "2,EPIC,Epic 1,NEW,Epic 1 Description,10,16:20 12.02.2024\n" +
-                "3,SUBTASK,Subtask 1,NEW,Subtask 1 Description,2,10,16:20 12.02.2024\n";
+        String fileContent = """
+                id,type,name,status,description,epic
+                1,TASK,Task 1,NEW,Task 1 Description,10,16:20 12.02.2024
+                2,EPIC,Epic 1,NEW,Epic 1 Description,10,16:20 12.02.2024
+                3,SUBTASK,Subtask 1,NEW,Subtask 1 Description,2,10,16:20 12.02.2024
+                """;
         Files.writeString(file.toPath(), fileContent);
         FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(file);
         ArrayList<Task> tasks = loadedManager.getAllTasks();
@@ -91,7 +92,9 @@ public class FileBackedTaskManagerTest {
     @Test
     public void testException() {
         fileBackedTaskManager = new FileBackedTaskManager(new File("path/to/non_existent_file.txt"));
-        Assertions.assertThrows(ManagerSaveException.class, () -> fileBackedTaskManager.addNewTask(new Task(1, "task 1", "desc task 1", Status.NEW, Duration.ofMinutes(1), LocalDateTime.now())));
+        Assertions.assertThrows(ManagerSaveException.class, () -> fileBackedTaskManager
+                .addNewTask(new Task(1, "Task 1", "Task 1 Description", Status.NEW, Duration.ofMinutes(10),
+                        LocalDateTime.of(2024, 2, 12, 16, 20, 0))));
     }
 
     @AfterEach

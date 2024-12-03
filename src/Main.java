@@ -17,22 +17,37 @@ public class Main {
 
         TaskManager inMemoryTaskManager = Managers.getDefault();
 
-        Task task1 = new Task(16, "Таска 1", "Описание таски 1",null, Duration.ofHours(1), LocalDateTime.of(2000, 9, 23, 10, 20));
-        Task task2 = new Task(12, "Таска 2", "Описание таски 2",null, Duration.ofHours(2), LocalDateTime.of(2021, 9, 23, 10, 20));
-        Task task3 = new Task(16, "Таска 3", "Описание таски 3",null, Duration.ofHours(3), LocalDateTime.of(2022, 9, 23, 10, 20));
-        Task task4 = new Task(12, "Таска 4", "Описание таски 4",null, Duration.ofHours(4), LocalDateTime.of(2023, 9, 23, 10, 20));
-        Task task5 = new Task(1, "Таска 1 обновлённая", "Обновлённое описание таски 1", Status.DONE, Duration.ofHours(5), LocalDateTime.of(2024, 9, 23, 10, 20));
-        Task task6 = new Task(2, "Таска 2 обновлённая", "Обновлённое описание таски 2", Status.IN_PROGRESS, Duration.ofHours(6), LocalDateTime.of(2025, 9, 23, 10, 20));
+        Task task1 = new Task(16, "Таска 1", "Описание таски 1",null, Duration.ofHours(1),
+                LocalDateTime.of(2000, 9, 23, 10, 20));
+        Task task2 = new Task(12, "Таска 2", "Описание таски 2",null, Duration.ofHours(2),
+                LocalDateTime.of(2021, 9, 23, 10, 20));
+        Task task3 = new Task(16, "Таска 3", "Описание таски 3",null, Duration.ofHours(3),
+                LocalDateTime.of(2022, 9, 23, 10, 20));
+        Task task4 = new Task(12, "Таска 4", "Описание таски 4",null, Duration.ofHours(4),
+                LocalDateTime.of(2023, 9, 23, 10, 20));
+        Task task5 = new Task(1, "Таска 1 обновлённая", "Обновлённое описание таски 1", Status.DONE,
+                Duration.ofHours(5), LocalDateTime.of(2024, 9, 23, 10, 20));
+        Task task6 = new Task(2, "Таска 2 обновлённая", "Обновлённое описание таски 2", Status.IN_PROGRESS,
+                Duration.ofHours(6), LocalDateTime.of(2025, 9, 23, 10, 20));
 
-        Epic epic1 = new Epic(1212, "Эпик1", "Описание эпик1",null, Duration.ofHours(7), LocalDateTime.of(2026, 9, 23, 10, 20));
-        Epic epic2 = new Epic(60890, "Эпик2", "Описание эпик2",null, Duration.ofHours(8), LocalDateTime.of(2027, 9, 23, 10, 20));
-        Epic epic3 = new Epic(6, "Эпик 2 обновленный", "Обновлённое описание эпика 2",null, Duration.ofHours(3), LocalDateTime.of(2028, 9, 23, 10, 20));
-        Subtask subtask1 = new Subtask(23, 5, "Сабтаска 1 для эпика 1", "Описание сабтаски 1 для эпика 1", Status.NEW, Duration.ofHours(9), LocalDateTime.of(2029, 9, 23, 10, 20));
-        Subtask subtask2 = new Subtask(4356, 5, "Сабтаска 1 для эпика 2", "Описание сабтаски 1 для эпика 2", Status.NEW, Duration.ofHours(10), LocalDateTime.of(2030, 9, 23, 10, 20));
-        Subtask subtask3 = new Subtask(3245, 6, "Сабтаска 2 для эпика 2", "Описание сабтаски 2 для эпика 2", Status.NEW, Duration.ofHours(11), LocalDateTime.of(2031, 9, 23, 10, 20));
-        Subtask subtask4 = new Subtask(7, 5, "Сабтаска 1 для эпика 1 обновлённая", "Обновлённое описание сабтаски 1 для эпика 1", Status.DONE, Duration.ofHours(12), LocalDateTime.of(2032, 9, 23, 10, 20));
-        Subtask subtask5 = new Subtask(8, 5, "Сабтаска 2 для эпика 1 обновлённая", "Обновлённое описание сабтаски 2 для эпика 1", Status.DONE, Duration.ofHours(13), LocalDateTime.of(2033, 9, 23, 10, 20));
-        Subtask subtask6 = new Subtask(9, 6, "Сабтаска 4 для эпика 2", "Описание сабтаски 4 для эпика 2", Status.DONE, Duration.ofHours(14), LocalDateTime.of(2034, 9, 23, 10, 20));
+        Epic epic1 = new Epic(1212, "Эпик1", "Описание эпик1",null, Duration.ofHours(7),
+                LocalDateTime.of(2026, 9, 23, 10, 20));
+        Epic epic2 = new Epic(60890, "Эпик2", "Описание эпик2",null, Duration.ofHours(8),
+                LocalDateTime.of(2027, 9, 23, 10, 20));
+        Epic epic3 = new Epic(6, "Эпик 2 обновленный", "Обновлённое описание эпика 2",null,
+                Duration.ofHours(3), LocalDateTime.of(2028, 9, 23, 10, 20));
+        Subtask subtask1 = new Subtask(23, 5, "Сабтаска 1 для эпика 1", "Описание сабтаски 1 для эпика 1",
+                Status.NEW, Duration.ofHours(9), LocalDateTime.of(2029, 9, 23, 10, 20));
+        Subtask subtask2 = new Subtask(4356, 5, "Сабтаска 1 для эпика 2", "Описание сабтаски 1 для эпика 2",
+                Status.NEW, Duration.ofHours(10), LocalDateTime.of(2030, 9, 23, 10, 20));
+        Subtask subtask3 = new Subtask(3245, 6, "Сабтаска 2 для эпика 2", "Описание сабтаски 2 для эпика 2",
+                Status.NEW, Duration.ofHours(11), LocalDateTime.of(2031, 9, 23, 10, 20));
+        Subtask subtask4 = new Subtask(7, 5, "Сабтаска 1 для эпика 1 обновлённая", "Обновлённое описание сабтаски 1 для эпика 1",
+                Status.DONE, Duration.ofHours(12), LocalDateTime.of(2032, 9, 23, 10, 20));
+        Subtask subtask5 = new Subtask(8, 5, "Сабтаска 2 для эпика 1 обновлённая", "Обновлённое описание сабтаски 2 для эпика 1",
+                Status.DONE, Duration.ofHours(13), LocalDateTime.of(2033, 9, 23, 10, 20));
+        Subtask subtask6 = new Subtask(9, 6, "Сабтаска 4 для эпика 2", "Описание сабтаски 4 для эпика 2",
+                Status.DONE, Duration.ofHours(14), LocalDateTime.of(2034, 9, 23, 10, 20));
 
         inMemoryTaskManager.addNewTask(task1);
         inMemoryTaskManager.addNewTask(task2);

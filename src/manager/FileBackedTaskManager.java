@@ -10,7 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
-import java.util.HashMap;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -110,24 +109,21 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public HashMap<Integer, Task> deleteTaskById(int id) {
-        HashMap<Integer, Task> tasks = super.deleteTaskById(id);
+    public void deleteTaskById(int id) {
+        super.deleteTaskById(id);
         save();
-        return tasks;
     }
 
     @Override
-    public HashMap<Integer, Epic> deleteEpicById(int id) {
-        HashMap<Integer, Epic> epics = super.deleteEpicById(id);
+    public void deleteEpicById(int id) {
+        super.deleteEpicById(id);
         save();
-        return epics;
-    }
+            }
 
     @Override
-    public HashMap<Integer, Subtask> deleteSubtaskById(int id) {
-        HashMap<Integer, Subtask> subtasks = super.deleteSubtaskById(id);
+    public void deleteSubtaskById(int id) {
+        super.deleteSubtaskById(id);
         save();
-        return subtasks;
     }
 
     @Override
