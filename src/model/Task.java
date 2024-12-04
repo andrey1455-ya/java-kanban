@@ -13,7 +13,6 @@ public class Task {
     private Status status;
     private Duration duration;
     private LocalDateTime startTime;
-    protected static String format = "HH:mm dd.MM.yyyy";
 
     public Task(int id, String name, String description, Status status) { //Конструктор со всеми полями
         this.id = id;
@@ -104,10 +103,6 @@ public class Task {
     @Override
     public String toString() {
         return TaskConverter.toString(this);
-    }
-
-    public static Task fromString(String value) {
-        return TaskConverter.fromString(value);
     }
 
     @Override

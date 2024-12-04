@@ -4,6 +4,8 @@ import exception.ManagerSaveException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
+import model.TaskConverter;
+
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,13 +25,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try (Writer writer = new FileWriter(file)) {
             writer.write("id,type,name,status,description,epic\n");
             for (Task task : taskHashMap.values()) {
-                writer.write(task.toString() + "\n");
+                writer.write(TaskConverter.toString(task) + "\n");
             }
             for (Epic epic : epicHashMap.values()) {
-                writer.write(epic.toString() + "\n");
+                writer.write(TaskConverter.toString(epic) + "\n");
             }
             for (Subtask subtask : subtasksHashMap.values()) {
-                writer.write(subtask.toString() + "\n");
+                writer.write(TaskConverter.toString(subtask) + "\n");
             }
         } catch (IOException e) {
             throw new ManagerSaveException(String.format("Ошибка при сохранении данных в файл: %s", file.getName()));
@@ -41,23 +43,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try {
             List<String> lines = Files.readAllLines(file.toPath());
             for (String line : lines.subList(1, lines.size())) {
-                String[] fields = line.split(",");
-                TaskType taskType = TaskType.valueOf(fields[1]);
-                switch (taskType) {
+                Task task = TaskConverter.fromString(line);
+                switch (task.getType()) {
                     case TASK:
-                        Task task = Task.fromString(line);
                         manager.addNewTask(task);
                         break;
                     case SUBTASK:
-                        Subtask subtask = Subtask.fromString(line);
-                        manager.addNewSubtask(subtask);
+                        manager.addNewSubtask((Subtask) task);
                         break;
                     case EPIC:
-                        Epic epic = Epic.fromString(line);
-                        manager.addNewEpic(epic);
+                        manager.addNewEpic((Epic) task);
                         break;
                     default:
-                        throw new IllegalArgumentException(String.format("Неизвестный тип задачи: %s", taskType));
+                        throw new IllegalArgumentException(String.format("Неизвестный тип задачи: %s", task.getType()));
                 }
             }
         } catch (IOException e) {
@@ -118,7 +116,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void deleteEpicById(int id) {
         super.deleteEpicById(id);
         save();
-            }
+    }
 
     @Override
     public void deleteSubtaskById(int id) {
