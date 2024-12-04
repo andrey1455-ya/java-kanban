@@ -55,8 +55,4 @@ public class Epic extends Task {
     public TaskType getType() {
         return TaskType.EPIC;
     }
-
-    public static Epic fromString(String value) {
-        return (Epic) TaskConverter.fromString(value);
-    }
 }
