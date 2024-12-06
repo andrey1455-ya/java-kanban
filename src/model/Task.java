@@ -2,13 +2,17 @@ package model;
 
 import manager.TaskType;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
     private int id;
-    private String name;
-    private String description;
+    private final String name;
+    private final String description;
     private Status status;
+    private Duration duration;
+    private LocalDateTime startTime;
 
     public Task(int id, String name, String description, Status status) { //Конструктор со всеми полями
         this.id = id;
@@ -36,6 +40,15 @@ public class Task {
         this.status = Status.NEW;
     }
 
+    public Task(int id, String name, String description, Status status, Duration duration, LocalDateTime startTime) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
     public void setStatus(Status status) {
         this.status = status;
     }
@@ -60,23 +73,36 @@ public class Task {
         return description;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%d,%s,%s,%s,%s,", id, TaskType.TASK, name, status, description);
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public static Task fromString(String value) {
-        String[] fields = value.split(",");
-        int id = Integer.parseInt(fields[0]);
-        TaskType taskType = TaskType.valueOf(fields[1]);
-        String name = fields[2];
-        Status status = Status.valueOf(fields[3]);
-        String description = fields[4];
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
 
-        if (taskType == TaskType.TASK) {
-            return new Task(id, name, description, status);
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        if (startTime == null || duration == null) {
+            return null;
         }
-        throw new IllegalArgumentException(String.format("Неподдерживаемый тип задачи: %s", taskType));
+        return startTime.plus(duration);
+    }
+
+    public TaskType getType() {
+        return TaskType.TASK;
+    }
+
+    @Override
+    public String toString() {
+        return TaskConverter.toString(this);
     }
 
     @Override
