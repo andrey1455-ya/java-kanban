@@ -24,7 +24,6 @@ public class inMemoryHistoryManagerTest {
     Task task2 = new Task(2, "Task 2", "Task 2 Description");
     Task task3 = new Task(3, "Task 3", "Task 3 Description");
 
-
     @Test
     void shouldTaskAddToHistory() {
         historyManager.addTaskToHistory(task1);

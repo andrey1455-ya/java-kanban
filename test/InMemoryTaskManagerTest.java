@@ -1,3 +1,4 @@
+import exception.NotFoundException;
 import exception.TaskValidationException;
 import manager.InMemoryTaskManager;
 import manager.Managers;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     @Override
@@ -26,12 +27,12 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
     TaskManager inMemoryTaskManager = Managers.getDefault();
 
     @Override
-    public void shouldBeInMemoryTaskManagerPutAllTaskTypes() { //InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
+    public void shouldBeInMemoryTaskManagerPutAllTaskTypes() throws NotFoundException { //InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
         super.shouldBeInMemoryTaskManagerPutAllTaskTypes();
     }
 
     @Test
-    public void shouldBeImmutabilityTaskWhenAddingToInMemoryTaskManager() { //тест, в котором проверяется неизменность задачи (по всем полям) при добавлении задачи в менеджер
+    public void shouldBeImmutabilityTaskWhenAddingToInMemoryTaskManager() throws NotFoundException { //тест, в котором проверяется неизменность задачи (по всем полям) при добавлении задачи в менеджер
         //prepare
         Task task1 = new Task(1, "Task 1", "Description 1");
         String name = task1.getName();
@@ -45,7 +46,6 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
                 .getDescription(), "Описание задачи в менеджере отличается от добавленной");
 
     }
-
 
     @Test
     public void shouldBeInMemoryTaskManagerDeleteTasks() { //Проверка, что все задачи удаляются из списка тасок/эпиков/сабтасок
@@ -70,7 +70,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
     }
 
     @Test
-    public void shouldGetAllSubtaskFromEpicById() { //Проверка, что по id эпика получаем все добавленные в него сабтаски
+    public void shouldGetAllSubtaskFromEpicById() throws NotFoundException { //Проверка, что по id эпика получаем все добавленные в него сабтаски
         //prepare
         Epic epic1 = new Epic(1, "Epic 1", "Epic 1 Description");
         Subtask subtask1 = new Subtask(1, 1, "Subtask 1", "Subtask 1 Description", Status.NEW,
@@ -103,15 +103,15 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
         inMemoryTaskManager.addNewEpic(epic1);
         inMemoryTaskManager.addNewSubtask(subtask1);
         //check
-        assertNull(inMemoryTaskManager.getTaskById(inMemoryTaskManager.getAllTasks().size() + 10));
-        assertNull(inMemoryTaskManager.getEpicById(inMemoryTaskManager.getAllEpics().size() + 10));
-        assertNull(inMemoryTaskManager.getSubtaskById(inMemoryTaskManager.getAllSubtasks().size() + 10));
+        assertThrows(NotFoundException.class, () -> inMemoryTaskManager.getTaskById(inMemoryTaskManager.getAllTasks().size() + 10));
+        assertThrows(NotFoundException.class, () -> inMemoryTaskManager.getEpicById(inMemoryTaskManager.getAllEpics().size() + 10));
+        assertThrows(NotFoundException.class, () -> inMemoryTaskManager.getSubtaskById(inMemoryTaskManager.getAllSubtasks().size() + 10));
     }
 
     @Test
-    public void shouldBeTaskReallyUpdated() {
+    public void shouldBeTaskReallyUpdated() throws NotFoundException {
         //prepare
-        Task task = new Task(1,"Task 1", "Description 1", Status.NEW,
+        Task task = new Task(1, "Task 1", "Description 1", Status.NEW,
                 Duration.ofMinutes(10), LocalDateTime.of(2024, 2, 12, 16, 20, 0));
         Task updatedTask = new Task(1, "Task 1 updated", "Description 1 updated", Status.NEW,
                 Duration.ofMinutes(10), LocalDateTime.of(2024, 2, 12, 16, 20, 0));
@@ -123,7 +123,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
     }
 
     @Test
-    public void shouldBeEpicReallyUpdated() {
+    public void shouldBeEpicReallyUpdated() throws NotFoundException {
         //prepare
         Epic epic = new Epic(1, "Epic 1", "Epic Description 1");
         Epic updatedEpic = new Epic(1, "Epic 1 updated", "Epic Description 1 updated");
@@ -135,7 +135,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
     }
 
     @Test
-    public void shouldBeSubtaskReallyUpdated() {
+    public void shouldBeSubtaskReallyUpdated() throws NotFoundException {
         //prepare
         Epic epic = new Epic(1, "Epic 1", "Epic 1 Description", Status.NEW,
                 Duration.ofMinutes(10), LocalDateTime.of(2024, 2, 12, 16, 20, 0));
@@ -181,7 +181,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
     }
 
     @Test
-    public void shouldEpicStatusNewWhenAllSubtaskStatusNew() {
+    public void shouldEpicStatusNewWhenAllSubtaskStatusNew() throws NotFoundException {
         Epic epic = new Epic(1, "epic1", "des1", Status.NEW);
         int id = inMemoryTaskManager.addNewEpic(epic).getId();
         Subtask subtask1 = new Subtask(1, 1, "subtask1", "desc subtask1", Status.NEW,
@@ -197,7 +197,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
     }
 
     @Test
-    public void shouldEpicStatusDoneWhenAllSubtaskStatusDone() {
+    public void shouldEpicStatusDoneWhenAllSubtaskStatusDone() throws NotFoundException {
         Epic epic = new Epic("epic1", "des1", Status.NEW);
         int id = inMemoryTaskManager.addNewEpic(epic).getId();
         Subtask subtask1 = new Subtask(1, 1, "subtask1", "desc subtask1", Status.DONE,
@@ -213,7 +213,7 @@ public class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager
     }
 
     @Test
-    public void shouldEpicStatusInProgressWhenAllSubtaskStatusInProgress() {
+    public void shouldEpicStatusInProgressWhenAllSubtaskStatusInProgress() throws NotFoundException {
         Epic epic = new Epic("epic1", "des1", Status.NEW);
         int id = inMemoryTaskManager.addNewEpic(epic).getId();
         Subtask subtask1 = new Subtask(1, 1, "subtask1", "desc subtask1", Status.IN_PROGRESS,

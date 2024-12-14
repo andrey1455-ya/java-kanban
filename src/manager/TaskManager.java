@@ -1,5 +1,6 @@
 package manager;
 
+import exception.NotFoundException;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -13,7 +14,7 @@ public interface TaskManager {
 
     void deleteAllTasks();
 
-    Task getTaskById(int id);
+    Task getTaskById(int id) throws NotFoundException;
 
     Task addNewTask(Task newTask);
 
@@ -26,7 +27,7 @@ public interface TaskManager {
 
     void deleteAllEpics();
 
-    Epic getEpicById(int id);
+    Epic getEpicById(int id) throws NotFoundException;
 
     Epic addNewEpic(Epic newEpic);
 
@@ -41,7 +42,7 @@ public interface TaskManager {
 
     void deleteAllSubtasks();
 
-    Subtask getSubtaskById(int id);
+    Subtask getSubtaskById(int id) throws NotFoundException;
 
     Subtask addNewSubtask(Subtask newSubtask);
 
@@ -50,4 +51,6 @@ public interface TaskManager {
     void deleteSubtaskById(int id);
 
     List<Task> getHistory();
+
+    List<Task> getPrioritizedTasks();
 }

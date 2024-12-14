@@ -1,3 +1,4 @@
+import exception.NotFoundException;
 import manager.Managers;
 import manager.TaskManager;
 import model.Epic;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws NotFoundException {
         System.out.println("Поехали!");
 
 
