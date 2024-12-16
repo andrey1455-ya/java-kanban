@@ -24,25 +24,40 @@ public class EpicHandler extends BaseHttpHandler {
             String method = exchange.getRequestMethod();
             String path = exchange.getRequestURI().getPath();
 
-            if ("GET".equals(method) && path.equals("/epics")) {
-                getEpics(exchange);
-            }
-            if ("GET".equals(method) && path.matches("/epics/\\d+")) {
-                int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
-                getEpicById(exchange, id);
-            }
-            if ("GET".equals(method) && path.matches("/epics/\\d+/subtasks")) {
-                int id = Integer.parseInt(path.split("/")[2]);
-                getEpicSubtasks(exchange, id);
-            }
-            if ("POST".equals(method) && path.equals("/epics")) {
-                String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-                Epic epic = gson.fromJson(body, Epic.class);
-                createEpic(exchange, epic);
-            }
-            if ("DELETE".equals(method) && path.matches("/epics/\\d+")) {
-                int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
-                deleteEpic(exchange, id);
+            switch (method) {
+                case "GET":
+                    if (path.equals("/epics")) {
+                        getEpics(exchange);
+                    } else if (path.matches("/epics/\\d+")) {
+                        int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
+                        getEpicById(exchange, id);
+                    } else if (path.matches("/epics/\\d+/subtasks")) {
+                        int id = Integer.parseInt(path.split("/")[2]);
+                        getEpicSubtasks(exchange, id);
+                    } else {
+                        sendNotFound(exchange, "Unknown path: " + path);
+                    }
+                    break;
+                case "POST":
+                    if (path.equals("/epics")) {
+                        String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+                        Epic epic = gson.fromJson(body, Epic.class);
+                        createEpic(exchange, epic);
+                    } else {
+                        sendNotFound(exchange, "Unknown path: " + path);
+                    }
+                    break;
+                case "DELETE":
+                    if (path.matches("/epics/\\d+")) {
+                        int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
+                        deleteEpic(exchange, id);
+                    } else {
+                        sendNotFound(exchange, "Unknown path: " + path);
+                    }
+                    break;
+                default:
+                    sendNotFound(exchange, "Method not allowed: " + method);
+                    break;
             }
         } catch (NotFoundException e) {
             sendNotFound(exchange, e.getMessage());
@@ -74,12 +89,11 @@ public class EpicHandler extends BaseHttpHandler {
 
     public void createEpic(HttpExchange exchange, Epic epic) throws IOException {
         String id = String.valueOf(taskManager.addNewEpic(epic));
-        sendCode(exchange, "Задача успешно добавлена, id = " + id);
+        sendCode(exchange, "Эпик успешно добавлен, id = " + id);
     }
 
     public void deleteEpic(HttpExchange exchange, int id) throws IOException, NotFoundException {
         taskManager.deleteEpicById(id);
-        sendText(exchange, "Задача успешно удалена");
-
+        sendText(exchange, "Эпик успешно удален");
     }
 }

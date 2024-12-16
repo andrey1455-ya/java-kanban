@@ -23,27 +23,42 @@ public class SubtaskHandler extends BaseHttpHandler {
             String method = exchange.getRequestMethod();
             String path = exchange.getRequestURI().getPath();
 
-            if ("GET".equals(method) && path.equals("/subtasks/")) {
-                getSubtask(exchange);
-            }
-            if ("GET".equals(method) && path.matches("/subtasks/\\d+")) {
-                int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
-                getSubtaskById(exchange, id);
-            }
-            if ("POST".equals(method) && path.equals("/subtasks")) {
-                String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-                Subtask subtask = gson.fromJson(body, Subtask.class);
-                int id = subtask.getId();
-
-                if (id == 0) {
-                    createSubtask(exchange, subtask);
-                } else {
-                    updateSubtask(exchange, subtask);
-                }
-            }
-            if ("DELETE".equals(method) && path.matches("/subtasks/\\d+")) {
-                int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
-                deleteSubtask(exchange, id);
+            switch (method) {
+                case "GET":
+                    if (path.equals("/subtasks/")) {
+                        getSubtask(exchange);
+                    } else if (path.matches("/subtasks/\\d+")) {
+                        int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
+                        getSubtaskById(exchange, id);
+                    } else {
+                        sendNotFound(exchange, "Unknown path: " + path);
+                    }
+                    break;
+                case "POST":
+                    if (path.equals("/subtasks")) {
+                        String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+                        Subtask subtask = gson.fromJson(body, Subtask.class);
+                        int id = subtask.getId();
+                        if (id == 0) {
+                            createSubtask(exchange, subtask);
+                        } else {
+                            updateSubtask(exchange, subtask);
+                        }
+                    } else {
+                        sendNotFound(exchange, "Unknown path: " + path);
+                    }
+                    break;
+                case "DELETE":
+                    if (path.matches("/subtasks/\\d+")) {
+                        int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
+                        deleteSubtask(exchange, id);
+                    } else {
+                        sendNotFound(exchange, "Unknown path: " + path);
+                    }
+                    break;
+                default:
+                    sendNotFound(exchange, "Method not allowed: " + method);
+                    break;
             }
         } catch (NotFoundException e) {
             sendNotFound(exchange, e.getMessage());
@@ -59,7 +74,7 @@ public class SubtaskHandler extends BaseHttpHandler {
     public void getSubtaskById(HttpExchange exchange, int id) throws IOException, NotFoundException {
         Subtask subtask = taskManager.getSubtaskById(id);
         if (subtask == null) {
-            sendNotFound(exchange, "Подзадача с id " + id + " не найдена");
+            sendNotFound(exchange, "Сабтаска с id " + id + " не найдена");
         } else {
             String json = gson.toJson(subtask);
             sendText(exchange, json);
@@ -69,7 +84,7 @@ public class SubtaskHandler extends BaseHttpHandler {
     public void createSubtask(HttpExchange exchange, Subtask subtask) throws IOException {
         try {
             String id = String.valueOf(taskManager.addNewSubtask(subtask));
-            sendCode(exchange, "Подзадача успешно добавлена, id = " + id);
+            sendCode(exchange, "Сабтаска успешно добавлена, id = " + id);
         } catch (TaskValidationException e) {
             sendHasInteractions(exchange, e.getMessage());
         }
@@ -78,7 +93,7 @@ public class SubtaskHandler extends BaseHttpHandler {
     public void updateSubtask(HttpExchange exchange, Subtask subtask) throws IOException, NotFoundException {
         try {
             taskManager.updateSubtask(subtask);
-            sendCode(exchange, "Подзадача успешно обновлена");
+            sendCode(exchange, "Сабтаска успешно обновлена");
         } catch (TaskValidationException e) {
             sendHasInteractions(exchange, e.getMessage());
         }
@@ -86,6 +101,6 @@ public class SubtaskHandler extends BaseHttpHandler {
 
     public void deleteSubtask(HttpExchange exchange, int id) throws IOException, NotFoundException {
         taskManager.deleteSubtaskById(id);
-        sendText(exchange, "Подзадача успешно удалена");
+        sendText(exchange, "Сабтаска успешно удалена");
     }
 }

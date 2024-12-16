@@ -24,23 +24,39 @@ public class TaskHandler extends BaseHttpHandler {
             String path = exchange.getRequestURI().getPath();
             String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
 
-            if ("GET".equals(method) && path.equals("/tasks")) {
-                getTask(exchange);
-            }
-            if ("GET".equals(method) && path.matches("/tasks/\\d+")) {
-                int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
-                getTaskById(exchange, id);
-            }
-            if ("POST".equals(method) && path.equals("/tasks")) {
-                Task task = gson.fromJson(body, Task.class);
-                createTask(exchange, task);
-            } else if ("POST".equals(method) && path.matches("/tasks/\\d+")) {
-                Task task = gson.fromJson(body, Task.class);
-                updateTask(exchange, task);
-            }
-            if ("DELETE".equals(method) && path.matches("/tasks/\\d+")) {
-                int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
-                deleteTask(exchange, id);
+            switch (method) {
+                case "GET":
+                    if (path.equals("/tasks")) {
+                        getTask(exchange);
+                    } else if (path.matches("/tasks/\\d+")) {
+                        int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
+                        getTaskById(exchange, id);
+                    } else {
+                        sendNotFound(exchange, "Unknown path: " + path);
+                    }
+                    break;
+                case "POST":
+                    if (path.equals("/tasks")) {
+                        Task task = gson.fromJson(body, Task.class);
+                        createTask(exchange, task);
+                    } else if (path.matches("/tasks/\\d+")) {
+                        Task task = gson.fromJson(body, Task.class);
+                        updateTask(exchange, task);
+                    } else {
+                        sendNotFound(exchange, "Unknown path: " + path);
+                    }
+                    break;
+                case "DELETE":
+                    if (path.matches("/tasks/\\d+")) {
+                        int id = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
+                        deleteTask(exchange, id);
+                    } else {
+                        sendNotFound(exchange, "Unknown path: " + path);
+                    }
+                    break;
+                default:
+                    sendNotFound(exchange, "Method not allowed: " + method);
+                    break;
             }
         } catch (NotFoundException e) {
             sendNotFound(exchange, e.getMessage());
@@ -62,7 +78,7 @@ public class TaskHandler extends BaseHttpHandler {
     public void createTask(HttpExchange exchange, Task task) throws IOException {
         try {
             String id = String.valueOf(taskManager.addNewTask(task));
-            sendCode(exchange, "Задача успешно добавлена, id = " + id);
+            sendCode(exchange, "Таска успешно добавлена, id = " + id);
         } catch (TaskValidationException e) {
             sendHasInteractions(exchange, e.getMessage());
         }
@@ -71,7 +87,7 @@ public class TaskHandler extends BaseHttpHandler {
     public void updateTask(HttpExchange exchange, Task task) throws IOException {
         try {
             taskManager.updateTask(task);
-            sendCode(exchange, "Задача успешно обновлена");
+            sendCode(exchange, "Таска успешно обновлена");
         } catch (TaskValidationException e) {
             sendHasInteractions(exchange, e.getMessage());
         }
@@ -79,6 +95,6 @@ public class TaskHandler extends BaseHttpHandler {
 
     public void deleteTask(HttpExchange exchange, int id) throws IOException, NotFoundException {
         taskManager.deleteTaskById(id);
-        sendText(exchange, "Задача успешно удалена");
+        sendText(exchange, "Таска успешно удалена");
     }
 }
