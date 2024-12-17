@@ -1,5 +1,6 @@
 package manager;
 
+import exception.NotFoundException;
 import exception.TaskValidationException;
 import model.Epic;
 import model.Status;
@@ -41,9 +42,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTaskById(int id) { // Метод получения Таски по id.
-        inMemoryHistoryManager.addTaskToHistory(taskHashMap.get(id));
-        return taskHashMap.get(id);
+    public Task getTaskById(int id) throws NotFoundException { // Метод получения Таски по id.
+        Task task = taskHashMap.get(id);
+        if (task == null) {
+            throw new NotFoundException("Таски с id = " + id + " не найдено");
+        }
+        inMemoryHistoryManager.addTaskToHistory(task);
+        return task;
     }
 
     @Override
@@ -99,9 +104,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Epic getEpicById(int id) { // Метод получения Эпика по id.
-        inMemoryHistoryManager.addTaskToHistory(epicHashMap.get(id));
-        return epicHashMap.get(id);
+    public Epic getEpicById(int id) throws NotFoundException { // Метод получения Эпика по id.
+        Epic epic = epicHashMap.get(id);
+        if (epic == null) {
+            throw new NotFoundException("Эпика с id = " + id + " не найдено");
+        }
+        inMemoryHistoryManager.addTaskToHistory(epic);
+        return epic;
     }
 
     @Override
@@ -196,9 +205,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Subtask getSubtaskById(int id) { //Получение сабтаски по id
-        inMemoryHistoryManager.addTaskToHistory(subtasksHashMap.get(id));
-        return subtasksHashMap.get(id);
+    public Subtask getSubtaskById(int id) throws NotFoundException { // Получение сабтаски по id
+        Subtask subtask = subtasksHashMap.get(id);
+        if (subtask == null) {
+            throw new NotFoundException("Сабтаски с id = " + id + " не найдено");
+        }
+        inMemoryHistoryManager.addTaskToHistory(subtask);
+        return subtask;
     }
 
     @Override
@@ -299,7 +312,6 @@ public class InMemoryTaskManager implements TaskManager {
     public List<Task> getPrioritizedTasks() {
         return prioritizedTasks.stream().toList();
     }
-
 
     public boolean isOverlappingTasks(Task newTask) {
         return prioritizedTasks.stream()

@@ -1,3 +1,4 @@
+import exception.NotFoundException;
 import manager.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     protected abstract T createTaskManager() throws IOException;
 
     @Test
-    public void shouldBeInMemoryTaskManagerPutAllTaskTypes() {
+    public void shouldBeInMemoryTaskManagerPutAllTaskTypes() throws NotFoundException {
         //prepare
         Task task1 = new Task(1, "Task 1", "Description 1", Status.NEW, Duration.ofMinutes(10),
                 LocalDateTime.of(2024, 2, 12, 16, 20, 0));
@@ -52,7 +53,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     @Test
-    public void shouldTestNotChangeAddInMemoryTaskManager() {
+    public void shouldTestNotChangeAddInMemoryTaskManager() throws NotFoundException {
         Task task1 = new Task(1, "task 1", "desc task 1", Status.NEW, Duration.ofMinutes(1), LocalDateTime.now());
         inMemoryTaskManager.addNewTask(task1);
         Task task2 = inMemoryTaskManager.getTaskById(1);
